@@ -1,0 +1,95 @@
+<body>
+    <div class="image">
+    </div>
+
+    <div class="side">
+        <div class="logo"></div>
+            <form class="modal-dialog" [formGroup]="myForm">
+              <div class="modal-content">
+                <p id="title">Join our community</p>
+                <div class="modal-body">
+                  <div style="display: flex;">
+                    <div class="mb-2 mr-2" style="width: 50%;">
+                      <label class="form-label">First name</label>
+                      <input class="form-control" placeholder="First name" [(ngModel)]="firstName" formControlName="firstname">
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('firstname')?.hasError('required') && (myForm.get('firstname')?.dirty || myForm.get('firstname')?.touched)">
+                      First name is required.
+                    </div>
+                    <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('firstname')?.hasError('pattern') && (myForm.get('firstname')?.dirty || myForm.get('firstname')?.touched)">
+                      First name must have at least 3 letters and needs to start with capital letter.
+                    </div>
+                    </div>
+
+                    <div class="mb-2" style="width: 50%">
+                      <label class="form-label">Last name</label>
+                      <input class="form-control" placeholder="Last name" [(ngModel)]="lastName" formControlName="lastname">
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('lastname')?.hasError('required') && (myForm.get('lastname')?.dirty || myForm.get('lastname')?.touched)">
+                        Last name is required.
+                      </div>
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('lastname')?.hasError('pattern') && (myForm.get('lastname')?.dirty || myForm.get('lastname')?.touched)">
+                        Last name must have at least 3 letters and needs to start with ca pital letter.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-2">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" type="email" placeholder="Email" [(ngModel)]="email" formControlName="email">
+                    <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('email')?.hasError('required') && (myForm.get('email')?.dirty || myForm.get('email')?.touched)">
+                      Email is required.
+                    </div>
+                    <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('email')?.hasError('pattern') && (myForm.get('email')?.dirty || myForm.get('email')?.touched)">
+                      Please enter valid email adress.
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex;">
+                    <div class="mb-2 mr-2">
+                      <label class="form-label">Username</label>
+                      <input class="form-control" placeholder="Username" [(ngModel)]="username" formControlName="username">
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('username')?.hasError('required') && (myForm.get('username')?.dirty || myForm.get('username')?.touched)">
+                        Username is required.
+                      </div>
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('username')?.hasError('pattern') && (myForm.get('username')?.dirty || myForm.get('username')?.touched)">
+                        Please enter valid username.
+                      </div>
+                    </div>
+                  
+                    <div class="mb-2">
+                      <label class="form-label">Phone number</label>
+                      <input class="form-control" placeholder="Phone number" [(ngModel)]="phone" formControlName="phone">
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('phone')?.hasError('required') && (myForm.get('phone')?.dirty || myForm.get('phone')?.touched)">
+                        Phone number is required.
+                      </div>
+                      <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('phone')?.hasError('pattern') && (myForm.get('phone')?.dirty || myForm.get('phone')?.touched)">
+                        Phone number needs to be like +38700000000.
+                      </div>
+                    </div>
+                  </div>
+          
+                  <div class="mb-2">
+                    <label for="inputPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" [(ngModel)]="password" formControlName="password">
+                    <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('password')?.hasError('required') && (myForm.get('password')?.dirty || myForm.get('password')?.touched)">
+                      Password is required.
+                    </div>
+                    <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('password')?.hasError('pattern') && (myForm.get('password')?.dirty || myForm.get('password')?.touched)">
+                      Password needs to have 6 characters.
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" id="add" (click)="btnRegistration()">Sign up</button>
+                </div>
+                <p>Already have an account? <a id="link" (click)="login()">Sign in</a></p>
+            </div>
+          </form> 
+      </div>
+      <div class="alert alert-success" role="alert" id="alertMessage" *ngIf="isAlert">
+        {{this.alert_message}}
+      </div>
+      <div class="alert alert-danger" role="alert" id="alertMessage" *ngIf="isAlertError">
+        {{this.alert_message_error}}
+        </div>
+  </body>

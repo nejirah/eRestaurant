@@ -1,0 +1,32 @@
+<body>
+    <div class="image">
+    </div>
+
+    <div class="side">
+        <div class="logo"></div>
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <p id="title">Login to your account</p>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input class="form-control" placeholder="Username" [(ngModel)]="txtKorisnickoIme">
+                  </div>
+          
+                  <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Password</label>
+                    <input type="password" [(ngModel)]="txtLozinka" class="form-control" id="inputPassword" placeholder="Password">
+                  </div>
+          
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" id="add" (click)="btnLogin()">Login</button>
+                </div>
+                <p>Don't have an account? <a id="link" (click)="registracija()">Sing up</a></p>
+            </div>
+        </div> 
+    </div>
+    <div class="alert alert-danger" role="alert" id="alertMessage" *ngIf="isAlertError">
+      {{this.alert_message_error}}
+      </div>
+</body>

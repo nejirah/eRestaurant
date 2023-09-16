@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<div class="upper">
+  <input class="search" placeholder="Search..." [(ngModel)]="filter_podaci">
+  <div class="searchButton" (click)="preuzmi_kupone(this.vrsta_kupona)">
+    <i class="fa fa-search" aria-hidden="true" id="searchIcon"></i>
+  </div>
+</div>
+
+<div class="categories">
+
+  <div class="category" style="margin-right: 40px; background-color: #B88E76; font-weight: bold;" (click)="preuzmi_kupone('All')">
+    <p>All</p>
+  </div>
+
+  <div class="category" (click)="preuzmi_kupone('Active')">
+    <p>Active</p>
+    <i class="fa fa-ticket" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_kupone('Expired')">
+    <p>Expired</p>
+    <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+</div>
+
+<div class="main">
+<div class="mainpart">
+  <h4 style="margin-bottom: 20px;color: #707070">{{vrsta_kupona}} coupons</h4>
+
+  <div *ngFor="let x of this.kuponi_podaci" class="kuponi">
+    <div class="leftPart">
+      <div class="picture"></div>
+      <div class="text">
+        <h4 style="font-weight: bold" id="bold">{{x.kupon.naziv}}</h4>
+        <p><b>Details:</b> {{x.kupon.opis}}</p>
+        <p><b>Active to:</b> {{formatdate(x.kupon.datumDeaktivacije)}}</p>
+        <p><b>Discount:</b> {{x.kupon.popust}}%</p>
+      </div>
+    </div>
+    <div class="button">
+      <button *ngIf="isDeactivationDatePast(x.kupon.datumDeaktivacije) && x.isActivated==false" class="insidebutton" (click)="Update(x)">Activate</button>
+      <p *ngIf="!isDeactivationDatePast(x.kupon.datumDeaktivacije)" style="color: red;">EXPIRED</p>
+      <p *ngIf="x.isActivated && isDeactivationDatePast(x.kupon.datumDeaktivacije)" style="color: green;">ACTIVATED</p>
+    </div>
+  </div>
+</div>
+<app-marketing></app-marketing>
+</div>
+<div class="alert alert-success" role="alert" id="alertMessage" *ngIf="isAlert">
+  {{this.alert_message}}
+</div>
+</body>
+</html>
+

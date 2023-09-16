@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+  <div class="upper">
+    <input class="search" placeholder="Search..." [(ngModel)]="filter_podaci">
+    <div class="searchButton" (click)="preuzmi_proizvode(this.vrsta_proizvoda)">
+      <i class="fa fa-search" aria-hidden="true" id="searchIcon"></i>
+    </div>
+  </div>
+
+<div class="categories">
+
+  <div class="category" style="margin-right: 40px; background-color: #B88E76; font-weight: bold;" (click)="preuzmi_proizvode('All')">
+    <p>All</p>
+  </div>
+
+  <div class="category" (click)="preuzmi_proizvode('Drinks')">
+    <p>Drinks</p>
+    <i class="fa fa-coffee" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_proizvode('Food')">
+    <p>Food</p>
+    <i class="fa fa-cutlery" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_proizvode('Dessert')">
+    <p>Dessert</p>
+    <i class="fa fa-birthday-cake" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+</div>
+
+<div class="main">
+<div class="mainpart">
+  <div class="addButton">
+    <p>Create an order:</p>
+    <button type="button" class="btn" id="add" (click)="KreirajNarudzbu()">New order</button>
+  </div>
+  <h4 style="margin-bottom: 20px;color: #707070">{{vrsta_proizvoda}}</h4>
+
+  <div *ngFor="let x of this.proizvodi_podaci" class="proizvodi">
+    <div class="leftPart">
+      <div class="picture"
+      style="height: 100%; width: 170px; border: 1px solid gray; border-radius: 25px; margin-right: 10px; background-image: url('{{get_slika(x)}}'); background-repeat: no-repeat; background-size: cover; background-position: center;"></div>
+      <div class="text">
+        <div style="display: flex; align-items: center;">
+          <h4 style="font-weight: bold">{{x.nazivProizvoda}}</h4>
+          <i style="color: #F44336;" class="fa fa-heart" aria-hidden="true" *ngIf="x.isFavorite==true"></i>
+        </div>
+        <p><b>Category:</b> {{x.proizvodiKategorije.nazivKategorije}}</p>
+        <p><b>Unit:</b> {{x.jedinicaMjere}}</p>
+        <p style="color: #1877F2; ;" id="favoritelink" *ngIf="x.isFavorite==false" (click)="update_favorite(x)"><b>ADD TO FAVORITE</b></p>
+        <p style="color: #FFC107; ;" id="favoritelink" *ngIf="x.isFavorite==true" (click)="remove_favorite(x)"><b>Remove from favorite</b></p>
+      </div>
+    </div>
+    <div class="button">
+      <p style="font-weight: bold; color: black; font-size: 20px;">{{x.pocetnaCijena}}$</p>
+      <button class="insidebutton" *ngIf="isNarudzba==false" (click)="odabrani_proizvod=x">See details</button>
+      <button *ngIf="isNarudzba==true"  id="addToCart" (click)="DodajUKorpu(x)">
+        <p style="margin-top: -5px;">+</p>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="odabrani_proizvod!=null" class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLiveLabel"> {{odabrani_proizvod.nazivProizvoda}} </h5>
+          <p id="ingredients" (click)="prikazi_sastojke(odabrani_proizvod)">See ingredients</p>
+          <button type="button" class="btn-close" aria-label="Close" (click)="odabrani_proizvod=null"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3" style="background-image: url('{{get_slika(odabrani_proizvod)}}'); height: 150px; width: 100%; border:1px solid gray; border-radius:25px 25px 25px 25px ; background-size: cover; background-position: center; background-repeat: no-repeat;"   >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input class="form-control" value="{{odabrani_proizvod.opis}}" disabled="">
+          </div>
+  
+          <div class="mb-3">
+            <label class="form-label">Product category</label>
+            <input class="form-control" value="{{odabrani_proizvod.proizvodiKategorije.nazivKategorije}}" disabled>
+          </div>
+          
+          <div style="display: flex;">
+            <div class="mb-3" style="width: 50%;">
+              <label class="form-label">Price</label>
+              <input class="form-control"  value="{{odabrani_proizvod.pocetnaCijena}}$" disabled>
+            </div>
+    
+            <div class="mb-3 ml-3" style="width: 50%;">
+              <label class="form-label">Unit</label>
+              <input class="form-control" value="{{odabrani_proizvod.jedinicaMjere}}" disabled>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center;">
+            <div class="mb-3" style="width: 50%;">
+              <label class="form-label">Review</label>
+              <input class="form-control" value="{{odabrani_proizvod.recenzija | number:'1.2-2'}}" disabled>
+            </div>
+          <button style="height:37px; margin-top: 7px; margin-left: 10px; background-color: #DBA080;" type="button" class="btn btn-secondary" (click)="odabrani_review=true">Add review</button>
+          </div>
+
+          <div class="mb-3" *ngIf="odabrani_review==true">
+            <label class="form-label">Add review</label>
+            <div style="display: flex;" [formGroup]="myForm">
+              <div style="display: flex; flex-direction: column; width: 50%;">
+                <input class="form-control" type="text" placeholder="Enter a value from 1 to 5" style="width: 100%;" [(ngModel)]="ocjenaProizvoda" formControlName="review">
+                <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('review')?.hasError('required') && (myForm.get('review')?.dirty || myForm.get('review')?.touched)">
+                  Review is required.
+               </div>
+               <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('review')?.hasError('pattern') && (myForm.get('review')?.dirty || myForm.get('review')?.touched)">
+                 Please enter a number from 1-5
+               </div>
+              </div>
+              <button type="button" class="btn btn-secondary" style="background-color: #DBA080; height: 37.6px; margin-left: 10px;" (click)="update_ocjenu(odabrani_proizvod)">Review this product</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="odabrani_proizvod=null">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div  *ngIf="isSastojci!=null" class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLiveLabel" style="color: #1877F2;"> Ingredients for {{odabrani_proizvod.nazivProizvoda}}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="isSastojci=null"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin-left: 20px;">
+            <ul *ngFor="let x of this.sastojci_proizvoda">
+              <li>{{x.sastojak.naziv}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="isSastojci=null">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-marketing *ngIf="isNarudzba==false"></app-marketing>
+
+<div class="order" *ngIf="isNarudzba==true" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Order number {{this.initalNaurzdba.narudzbaID}} </h5>
+        <i id="delete" style="color: red" class="fa fa-trash-o" aria-hidden="true" (click)="Delete()"></i>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="this.stavke_narudzbe_podaci==null">Add your products here...</p>
+
+        <div  *ngFor="let x of this.stavke_narudzbe_podaci">
+          <hr>
+          <div style="display: flex;">
+            <div style="display: flex; flex-direction: column;  width: 40%;">
+              <p style="color: grey; font-weight: bold;">{{x.proizvod.nazivProizvoda}}</p>
+              <p style="font-weight: bold;">{{x.proizvod.pocetnaCijena}}$</p>
+            </div>
+            <div style="display: flex;width: 60%; align-items: center;">
+              <div class="input-group" style=" width: 40%;">
+                <input type="number" class="form-control" id="quantity" [value]="x.kolicina" name="quantity" min="1"  (change)="UpdateKolicinu(x,$event)">
+              </div> 
+              <p id="remove" (click)="removeFromCart(x)">Remove item</p>
+            </div>
+          </div>
+          <hr>
+        </div>
+
+        <div class="mb-3" *ngIf="this.stavke_narudzbe_podaci!=null">
+          <label class="form-label">Note</label>
+          <textarea class="form-control" aria-label="With textarea" placeholder="Type here..." [(ngModel)]="initalNaurzdba.dodatnaNapomena"></textarea>
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <div *ngFor="let y of this.kuponi_podaci" style="display: flex; justify-content: flex-end; color: #1877F2; font-size: 10px;">
+            *{{y.kupon.naziv}}
+        </div>
+        <div style="display: flex;">
+          <p style="color: grey;">Total price: </p>
+          <p id="totalPrice">{{ calculateTotalPrice() }}$ </p>
+        </div>
+        <button *ngIf="stavke_narudzbe_podaci!=null" type="button" class="btn btn-primary" id="add" style="width: 100%; margin: 0;" (click)="DodajNarudzbu()">Create an order</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<div class="alert alert-success" role="alert" id="alertMessage" *ngIf="isAlert">
+  {{this.alert_message}}
+</div>
+<div class="alert alert-danger" role="alert" id="alertMessage" *ngIf="isAlertError">
+  {{this.alert_message_error}}
+  </div>
+</body>
+</html>
+

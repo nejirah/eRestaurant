@@ -1,0 +1,63 @@
+.settings{
+    display: flex;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+    color: #707070;
+    justify-content: flex-end;
+    font-size: 23px;
+  }
+  .settings i:hover{
+    cursor: pointer;
+  }
+  .settings i{
+    margin-left: 20px;
+  }
+
+  .notification{
+    height: 15px;
+    width: 15px;
+    border: 1px solid red;
+    border-radius: 50%;
+    color: white;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top:35px;
+    left: 1315px;
+    font-size: 12px;
+  }
+  
+  .notification:hover{
+    cursor: pointer;
+  }
+
+  .window{
+    border: 1px solid gray;
+    padding: 15px;
+    border-radius: 10px;
+    position: fixed;
+    left: 1100px;
+    top:70px;
+    background-color: white;
+    width: 300px;
+  }
+
+  .singlenotification{
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .cicrleImage{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-image: url(../../assets/logo.png);
+    background-position: center;
+    background-size: cover;
+    margin-right: 10px;
+
+  }

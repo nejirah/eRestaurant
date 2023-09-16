@@ -1,0 +1,24 @@
+<div class="settings">
+    <i class="fa fa-bell" aria-hidden="true" style="margin-top: 10px" (click)="prikazi_notifikacije()"></i>
+    <i class="fa fa-cog" aria-hidden="true" style="margin-top: 10px"></i>
+    <i data-bs-toggle="dropdown" class="fa fa-user-circle" aria-hidden="true" style="margin-top: 10px"></i>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">See profile details</a></li>
+      <li><a class="dropdown-item" href="#" (click)="logoutButton()">Logout</a></li>
+    </ul>
+  </div>
+
+  <div *ngIf="probaServis.poruka1 != null" class="notification">1</div>
+  <div *ngIf="this.prikaziNotifikacija==true" class="window" >
+    <div style="border-bottom: 1px solid gray;">
+      <p style="font-weight: bold;">Notification list</p>
+    </div>
+    <div *ngFor="let x of this.notifikacija_podaci" class="singlenotification">
+      <div class="cicrleImage"></div>
+      <div style="display: flex;flex-direction: column;width: 90%;">
+        <p style="margin: 0; font-size: 13px; text-align: justify;">{{x.opis}}</p>
+        <p style="font-size: 10px; color: #1877F2; font-weight: bold; margin: 0;">Gates of orient</p>
+        <hr style="border: 1px solid gray;">
+      </div>
+    </div>
+  </div>

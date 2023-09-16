@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<div class="upper">
+  <input class="search" placeholder="Search..." [(ngModel)]="filter_podaci">
+  <div class="searchButton" (click)="preuzmi_rezervaacije(this.vrsta_rezervacija)">
+    <i class="fa fa-search" aria-hidden="true" id="searchIcon"></i>
+  </div>
+</div>
+
+<div class="categories">
+
+  <div class="category" style="margin-right: 40px; background-color: #B88E76; font-weight: bold;" (click)="preuzmi_rezervaacije('All')">
+    <p>All</p>
+  </div>
+
+  <div class="category" (click)="preuzmi_rezervaacije('Pending')">
+    <p>Pending</p>
+    <i class="fa fa-clock-o" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_rezervaacije('Concluded')">
+    <p>Concluded</p>
+    <i class="fa fa-th-list" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+</div>
+
+<div class="main">
+<div class="mainpart">
+  <div class="addButton">
+    <p>Create a reservation:</p>
+    <button type="button" class="btn" id="add" (click)="Dodaj()">New resesrvation</button>
+  </div>
+
+  <h4 style="margin-bottom: 20px;color: #707070">{{vrsta_rezervacija}} reservation</h4>
+<div *ngFor="let x of this.rezervacije_podaci" class="rezervacaija">
+  <div class="leftPart">
+    <div class="picture"></div>
+    <div class="text">
+      <h4 style="font-weight: bold">Reservation number {{x.rezervacijaID}}</h4>
+      <p><b>User:</b> {{x.korisnik.ime +" "+ x.korisnik.prezime}}</p>
+      <p><b>Table number: </b> {{x.brojStola}}</p>
+      <p><b>Party size:</b> {{x.brojOsoba}}</p>
+      <p><b>Date of reservation:</b> {{formatdate(x.datumRezervacije)}}</p>
+      <p><b>Note:</b> {{x.napomena}}</p>
+    </div>
+  </div>
+  <div class="button" *ngIf="isDatePast(x.datumRezervacije)">
+    <i id="delete" style="color: red" class="fa fa-trash-o" aria-hidden="true" (click)="Delete(x)"></i>
+    <button class="insidebutton" (click)="odabrana_rezervacija=x">Update</button>
+  </div>
+</div>
+
+
+<div [formGroup]="myForm" *ngIf="odabrana_rezervacija!=null" class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel"> {{odabrana_rezervacija.rezervacijaID!=0?"Update reservation":"New reservation"}} </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="odabrana_rezervacija=null"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Party size</label>
+          <input class="form-control" placeholder="Party size" [(ngModel)]="odabrana_rezervacija.brojOsoba" formControlName="personnumber">
+          <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('personnumber')?.hasError('required') && (myForm.get('personnumber')?.dirty || myForm.get('personnumber')?.touched)">
+             Party size is required.
+          </div>
+          <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('personnumber')?.hasError('pattern') && (myForm.get('personnumber')?.dirty || myForm.get('personnumber')?.touched)">
+            Maximum capacity is 6.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Table number</label>
+          <input class="form-control" placeholder="Table number" [(ngModel)]="odabrana_rezervacija.brojStola" formControlName="tablenumber">
+          <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('tablenumber')?.hasError('required') && (myForm.get('tablenumber')?.dirty || myForm.get('tablenumber')?.touched)">
+            Table number is required.
+         </div>
+         <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('tablenumber')?.hasError('pattern') && (myForm.get('tablenumber')?.dirty || myForm.get('tablenumber')?.touched)">
+           Choose table from 1-9
+         </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Date of reservation</label>
+          <input class="form-control" type="datetime-local" [(ngModel)]="odabrana_rezervacija.datumRezervacije" placeholder="Date of reservation" formControlName="date">
+          <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('date')?.hasError('invalidDate') && (myForm.get('date')?.dirty || myForm.get('date')?.touched)">
+            Please choose correct date.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Note</label>
+          <input class="form-control" placeholder="Note" [(ngModel)]="odabrana_rezervacija.napomena" formControlName="napomena">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="odabrana_rezervacija=null">Close</button>
+        <button type="button" class="btn btn-primary" id="add" (click)="Add()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<app-marketing></app-marketing>
+</div>
+  <div class="alert alert-success" role="alert" id="alertMessage" *ngIf="isAlert">
+    {{this.alert_message}}
+  </div>
+  <div class="alert alert-danger" role="alert" id="alertMessage" *ngIf="isAlertError">
+  {{this.alert_message_error}}
+  </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.side{
+    width: 250px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    background-image: url('https://st2.depositphotos.com/5544578/8976/v/950/depositphotos_89763874-stock-illustration-click-here-vertical-advertising-banner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    border-radius: 10px;
+  }

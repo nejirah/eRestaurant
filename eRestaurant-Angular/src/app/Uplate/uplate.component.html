@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<div class="upper">
+  <input class="search" placeholder="Search..." [(ngModel)]="filter_podaci">
+  <div class="searchButton" (click)="preuzmi_uplate(this.vrsta_uplate)">
+    <i class="fa fa-search" aria-hidden="true" id="searchIcon"></i>
+  </div>
+</div>
+
+<div class="categories">
+
+  <div class="category" style="margin-right: 40px; background-color: #B88E76; font-weight: bold;" (click)="preuzmi_uplate('All')">
+    <p>All</p>
+  </div>
+
+  <div class="category" (click)="preuzmi_uplate('Cash')">
+    <p>Cash</p>
+    <i class="fa fa-money" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_uplate('Credit card')">
+    <p>Credit card</p>
+    <i class="fa fa-credit-card-alt" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+</div>
+
+<div class="main">
+<div class="mainpart">
+  <h4 style="margin-bottom: 20px;color: #707070">{{vrsta_uplate}} payments</h4>
+
+  <div *ngFor="let x of this.uplate_podaci" class="uplate">
+    <div class="leftPart">
+      <div class="picture"></div>
+      <div class="text">
+        <h4 style="font-weight: bold" id="bold">Payment number {{x.uplataID}}</h4>
+        <p><b>Amount:</b> {{x.uplata.iznosZaUplatu}}$</p>
+        <p><b>Payment method:</b> {{x.uplata.nacinPlacanja}}</p>
+        <p><b>Credit card number:</b> {{x.uplata.brojKartice?x.brojKartice:"-"}}</p>
+        <p><b>Date:</b> {{formatdate(x.uplata.datum)}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<app-marketing></app-marketing>
+</div>
+</body>
+</html>

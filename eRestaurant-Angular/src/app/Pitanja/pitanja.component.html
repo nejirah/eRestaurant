@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<div class="upper">
+  <input class="search" placeholder="Search..." [(ngModel)]="filter_podaci">
+  <div class="searchButton" (click)="preuzmi_pitanja(this.vrsta_pitanja)">
+    <i class="fa fa-search" aria-hidden="true" id="searchIcon"></i>
+  </div>
+</div>
+
+<div class="categories">
+
+  <div class="category" style="margin-right: 40px; background-color: #B88E76; font-weight: bold;" (click)="preuzmi_pitanja('All')">
+    <p>All</p>
+  </div>
+
+  <div class="category" (click)="preuzmi_pitanja('Answered')">
+    <p>Answered</p>
+    <i class="fa fa-check-circle" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_pitanja('Unanswered')">
+    <p>Unanswered</p>
+    <i class="fa fa-times" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+</div>
+
+<div class="main">
+<div class="mainpart">
+  <div class="addButton">
+    <p>Ask a question:</p>
+    <button type="button" class="btn" id="add" (click)="Dodaj()">New question</button>
+  </div>
+
+  <h4 style="margin-bottom: 20px;color: #707070">{{vrsta_pitanja}} questions</h4>
+<div *ngFor="let x of this.pitanja_podaci" class="pitanje">
+  <div class="leftPart">
+    <div class="picture"></div>
+    <div class="text">
+      <h4 style="font-weight: bold">{{x.opis}}</h4>
+      <p>Answer:  {{x.odgovor}}</p>
+      <p><b>User:</b> {{x.korisnik.ime +" "+ x.korisnik.prezime}}</p>
+      <p><b>Date:</b> {{formatdate(x.datum)}}</p>
+    </div>
+  </div>
+  <div class="button">
+    <i id="delete" style="color: red" class="fa fa-trash-o" aria-hidden="true" *ngIf="x.status=='Unanswered' && x.korisnikID== this.trenutni_korisnik" (click)="Delete(x)"></i>
+    <button class="insidebutton" (click)="odabrano_pitanje=x" *ngIf="x.status=='Unanswered' && x.korisnikID== this.trenutni_korisnik" (click)="odabrano_pitanje=x">Update</button>
+    <p  *ngIf="x.status!='Unanswered'">ANSWERED</p>
+  </div>
+
+  <div [formGroup]="myForm" *ngIf="odabrano_pitanje!=null" class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLiveLabel"> {{odabrano_pitanje.pitanjeID!=0?"Update quesstion":"New question"}} </h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="odabrano_pitanje=null"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Question:</label>
+            <textarea class="form-control" aria-label="With textarea" placeholder="Type question" [(ngModel)]="odabrano_pitanje.opis" formControlName="question"></textarea>
+            <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('question')?.hasError('required') && (myForm.get('question')?.dirty || myForm.get('question')?.touched)">
+              Question is required.
+           </div>
+           <div style="color: #F44336; font-size: 12px;" *ngIf="myForm.get('question')?.hasError('pattern') && (myForm.get('question')?.dirty || myForm.get('question')?.touched)">
+             Question needs to have at least 6 characters.
+           </div>
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="odabrano_pitanje=null">Close</button>
+          <button type="button" class="btn btn-primary" id="add" (click)="Add()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<app-marketing></app-marketing>
+</div>
+<div class="alert alert-success" role="alert" id="alertMessage" *ngIf="isAlert">
+  {{this.alert_message}}
+</div>
+<div class="alert alert-danger" role="alert" id="alertMessage" *ngIf="isAlertError">
+  {{this.alert_message_error}}
+  </div>
+</body>
+</html>

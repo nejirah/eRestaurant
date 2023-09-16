@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+  <div class="upper">
+    <input class="search" placeholder="Search..." [(ngModel)]="filter_podaci">
+    <div class="searchButton" (click)="preuzmi_narudzbe(this.vrsta_narudzbe)">
+      <i class="fa fa-search" aria-hidden="true" id="searchIcon"></i>
+    </div>
+  </div>
+
+<div class="categories">
+
+  <div class="category" style="margin-right: 40px; background-color: #B88E76; font-weight: bold;" (click)="preuzmi_narudzbe('All')">
+    <p>All</p>
+  </div>
+
+  <div class="category" (click)="preuzmi_narudzbe('Pending')">
+    <p>Pending</p>
+    <i class="fa fa-clock-o" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+  <div class="category" (click)="preuzmi_narudzbe('Concluded')">
+    <p>Concluded</p>
+    <i class="fa fa-th-list" aria-hidden="true" style="font-size:20px; margin-left: 10px;"></i>
+  </div>
+
+</div>
+
+<div class="main">
+<div class="mainpart">
+  <h4 style="margin-bottom: 20px;color: #707070">{{vrsta_narudzbe}} orders</h4>
+
+  <div *ngFor="let x of this.narudzba_podaci" class="rezervacaija">
+    <div class="leftPart">
+      <div class="picture"></div>
+      <div class="text">
+        <h4 style="font-weight: bold">Order number {{x.narudzbaID}}</h4>
+        <p><b>User:</b> {{x.korisnik.ime +" "+ x.korisnik.prezime}}</p>
+        <p><b>Date:</b> {{formatdate(x.datumNarudzbe)}}</p>
+        <p><b>Price:</b> {{x.ukupnaCijena}}$</p>
+      </div>
+    </div>
+    <div class="button">
+      <div class="status">
+        <p>{{x.statusNarudzbe}}</p>
+      </div>
+      <button class="insidebutton" (click)="odaberi_narudzbu(x)">See details</button>
+    </div>
+  </div>
+
+  <div *ngIf="odabrana_narudzba!=null" class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLiveLabel"> Order number {{odabrana_narudzba.narudzbaID}} </h5>
+        </div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label class="form-label">User</label>
+            <input class="form-control" value="{{odabrana_narudzba.korisnik.ime}} {{odabrana_narudzba.korisnik.prezime}}" disabled>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input class="form-control" type="datetime-local" [ngModel]="odabrana_narudzba.datumNarudzbe | date:'yyyy-MM-ddTHH:mm'" readonly>
+          </div>
+          
+
+          <div style="display: flex;">
+            <div class="mb-3" style="width: 50%;">
+              <label class="form-label">Discount</label>
+              <input class="form-control" value="{{(odabrana_narudzba.popust * 100).toFixed(0)}}%" disabled>
+            </div>
+
+            <div class="mb-3  ml-3" style="width: 50%;">
+              <label class="form-label">Total price</label>
+              <input class="form-control" value="{{odabrana_narudzba.ukupnaCijena}}$" disabled>
+            </div>
+          </div>
+
+          <div style="display: flex;">
+            <div class="mb-3" style="width: 50%;">
+              <label class="form-label">Status</label>
+              <input class="form-control" value="{{odabrana_narudzba.statusNarudzbe}}" disabled>
+            </div>
+  
+            <div class="mb-3 ml-3" style="width: 50%;">
+              <label class="form-label">Type of order</label>
+              <input class="form-control" value="{{odabrana_narudzba.tipNarudzbe}}" disabled>
+            </div> 
+
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Note</label>
+            <input class="form-control" value="{{ odabrana_narudzba.dodatnaNapomena ? odabrana_narudzba.dodatnaNapomena : 'None' }}" disabled>
+          </div>
+
+          <div style="margin-left: 20px;">
+            <ul *ngFor="let x of this.stavke_narudzbe">
+              <div style="display: flex;">
+                <li>{{x.proizvod.nazivProizvoda}}</li>
+                <b style="margin-left: 20px;">{{x.proizvod.pocetnaCijena}}$</b>
+              </div>
+            </ul>
+          </div>
+  
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="odabrana_narudzba=null">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>
+<app-marketing></app-marketing>
+
+</div>
+</body>
+</html>
